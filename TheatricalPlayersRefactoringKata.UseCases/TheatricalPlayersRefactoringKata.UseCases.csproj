@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="NewFile1.txt" />
+    <None Remove="Plays\Dtos\NewFile1.txt" />
+    <None Remove="Plays\Extensions\NewFile1.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TheatricalPlayersRefactoringKata.Core\TheatricalPlayersRefactoringKata.Core.csproj" />
   </ItemGroup>
 
