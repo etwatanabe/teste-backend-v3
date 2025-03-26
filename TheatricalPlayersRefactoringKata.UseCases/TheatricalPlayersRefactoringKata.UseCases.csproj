@@ -10,4 +10,10 @@
     <ProjectReference Include="..\TheatricalPlayersRefactoringKata.Core\TheatricalPlayersRefactoringKata.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Invoices\Commands\" />
+    <Folder Include="Invoices\Queries\" />
+    <Folder Include="Plays\Queries\" />
+  </ItemGroup>
+
 </Project>

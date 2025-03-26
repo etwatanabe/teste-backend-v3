@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Common\NewFile1.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Valhalla.Lib.GuardClauses" Version="1.0.0" />
+    <PackageReference Include="Valhalla.Lib.Result" Version="1.0.0" />
+    <PackageReference Include="Valhalla.Lib.SharedKernel" Version="1.3.5" />
+  </ItemGroup>
+
 </Project>
