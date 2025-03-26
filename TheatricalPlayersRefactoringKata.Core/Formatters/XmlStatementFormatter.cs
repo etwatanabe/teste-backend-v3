@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using TheatricalPlayersRefactoringKata.Core.Calculators;
 using TheatricalPlayersRefactoringKata.Core.PlayAggregate;
+using TheatricalPlayersRefactoringKata.Core.InvoiceAggregate;
 
 namespace TheatricalPlayersRefactoringKata.Core.Formatters
 {
@@ -17,7 +18,7 @@ namespace TheatricalPlayersRefactoringKata.Core.Formatters
             _calculators = calculators;
         }
 
-        public string Format(Invoice invoice, Dictionary<string, Play> plays)
+        public string Format(Invoice invoice, Dictionary<Guid, Play> plays)
         {
             decimal totalAmount = 0;
             int totalCredits = 0;
@@ -35,8 +36,8 @@ namespace TheatricalPlayersRefactoringKata.Core.Formatters
 
             foreach (var perf in invoice.Performances)
             {
-                var play = plays[perf.PlayId];
-                var calculator = _calculators[play.Type];
+                var play = plays[perf.PlayID];
+                var calculator = _calculators[play.Type.ToString()];
                 decimal thisAmount = calculator.CalculateAmount(perf, play);
                 int thisCredits = calculator.CalculateCredits(perf, play);
 

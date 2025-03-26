@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Runtime.Serialization;
 using TheatricalPlayersRefactoringKata.Core.Calculators;
 using TheatricalPlayersRefactoringKata.Core.Formatters;
+using TheatricalPlayersRefactoringKata.Core.InvoiceAggregate;
 using TheatricalPlayersRefactoringKata.Core.PlayAggregate;
 
 namespace TheatricalPlayersRefactoringKata.Core;
@@ -17,7 +18,7 @@ public class StatementPrinter
         _formatter = formatter;
     }
 
-    public string Print(Invoice invoice, Dictionary<string, Play> plays)
+    public string Print(Invoice invoice, Dictionary<Guid, Play> plays)
     {
         return _formatter.Format(invoice, plays);
     }

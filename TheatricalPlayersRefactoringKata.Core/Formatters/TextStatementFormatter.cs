@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using TheatricalPlayersRefactoringKata.Core.Calculators;
+using TheatricalPlayersRefactoringKata.Core.InvoiceAggregate;
 using TheatricalPlayersRefactoringKata.Core.PlayAggregate;
 
 namespace TheatricalPlayersRefactoringKata.Core.Formatters;
@@ -15,7 +16,7 @@ public class TextStatementFormatter : IStatementFormatter
         _calculators = calculators;
     }
 
-    public string Format(Invoice invoice, Dictionary<string, Play> plays)
+    public string Format(Invoice invoice, Dictionary<Guid, Play> plays)
     {
         CultureInfo cultureInfo = new CultureInfo("en-US");
         decimal totalAmount = 0;
@@ -24,8 +25,8 @@ public class TextStatementFormatter : IStatementFormatter
 
         foreach (var perf in invoice.Performances)
         {
-            var play = plays[perf.PlayId];
-            var calculator = _calculators[play.Type];
+            var play = plays[perf.PlayID];
+            var calculator = _calculators[play.Type.ToString()];
             decimal thisAmount = calculator.CalculateAmount(perf, play);
             totalCredits += calculator.CalculateCredits(perf, play);
 
