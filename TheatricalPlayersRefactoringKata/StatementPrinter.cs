@@ -20,6 +20,4 @@ public class StatementPrinter
     {
         return _formatter.Format(invoice, plays);
     }
-
-
 }

@@ -1,0 +1,6 @@
+@TheatricalPlayersRefactoringKata.Application_HostAddress = http://localhost:5150
+
+GET {{TheatricalPlayersRefactoringKata.Application_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

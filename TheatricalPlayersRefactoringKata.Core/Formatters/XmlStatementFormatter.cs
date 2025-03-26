@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Xml;
-using TheatricalPlayersRefactoringKata.Calculators;
 using System.IO;
 using System.Text;
+using TheatricalPlayersRefactoringKata.Core.Calculators;
+using TheatricalPlayersRefactoringKata.Core.PlayAggregate;
 
-namespace TheatricalPlayersRefactoringKata.Formatters
+namespace TheatricalPlayersRefactoringKata.Core.Formatters
 {
     public class XmlStatementFormatter : IStatementFormatter
     {
