@@ -13,7 +13,7 @@ public static class Setup
     {
         services.AddDbContext<SqlDbContext>(options =>
         {
-            options.UseSqlite(Guard.Against.NullOrWhiteSpace(Environment.GetEnvironmentVariable("SQLSERVER_CONNECTION_STRING")));
+            options.UseSqlite("Data Source=TheatricalPlayersRefactoringKata.db");
         });
         services.AddTransient<SqlDbContext>();
         services.AddTransient(typeof(IRepository<>), typeof(EfRepository<>));
