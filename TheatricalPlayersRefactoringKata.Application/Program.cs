@@ -1,6 +1,7 @@
 using Serilog;
 using Serilog.Extensions.Logging;
 using TheatricalPlayersRefactoringKata.Infrastructure.Data.SQL;
+using TheatricalPlayersRefactoringKata.Infrastructure.Data.SQLServer;
 using Valhalla.Lib.SharedKernel;
 
 var logger = Log.Logger = new LoggerConfiguration()
@@ -38,6 +39,9 @@ builder.Services.AddSqlDbContext(microsoftLogger);
 builder.Services.AddUseCasesServices(microsoftLogger);
 builder.Services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
 
+// Isso aqui nao deveria ta aqui, mas esta, fé
+builder.Services.AddHostedService<AppDbInitializerService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -53,3 +57,16 @@ app.UseAuthorization();
 app.MapControllers();
 app.Run();
 
+public class AppDbInitializerService(IServiceProvider _serviceProvider) : IHostedService
+{
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        using (var scope = _serviceProvider.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<SqlDbContext>();
+            dbContext.InitializeDatabase();
+        }
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+}
