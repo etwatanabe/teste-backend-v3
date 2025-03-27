@@ -19,6 +19,13 @@ public class SqlDbContext(IServiceProvider serviceProvider,
     public DbSet<Play> Play => Set<Play>();
     public DbSet<Invoice> Invoice => Set<Invoice>();
 
+    // A preguiça de usar migrations é grande
+    public void InitializeDatabase()
+    {
+        // Isso cria o banco de dados se ele ainda não existir
+        this.Database.EnsureCreated();
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

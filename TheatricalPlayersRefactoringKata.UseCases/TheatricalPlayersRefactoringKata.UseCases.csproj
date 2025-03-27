@@ -10,16 +10,11 @@
     <None Remove="NewFile1.txt" />
     <None Remove="Plays\Dtos\NewFile1.txt" />
     <None Remove="Plays\Extensions\NewFile1.txt" />
+    <None Remove="Plays\Queries\NewFile1.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TheatricalPlayersRefactoringKata.Core\TheatricalPlayersRefactoringKata.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Invoices\Commands\" />
-    <Folder Include="Invoices\Queries\" />
-    <Folder Include="Plays\Queries\" />
   </ItemGroup>
 
 </Project>

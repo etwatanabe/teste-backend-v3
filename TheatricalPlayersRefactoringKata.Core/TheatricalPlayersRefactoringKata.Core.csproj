@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Common\NewFile1.txt" />
+    <None Remove="PlayAggregate\Specifications\NewFile1.txt" />
   </ItemGroup>
 
   <ItemGroup>
