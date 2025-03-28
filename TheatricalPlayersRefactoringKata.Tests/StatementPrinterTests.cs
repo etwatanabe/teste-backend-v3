@@ -1,82 +1,121 @@
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using System.Collections.Generic;
+using System.Linq;
+using TheatricalPlayersRefactoringKata.Core.Interfaces;
+using TheatricalPlayersRefactoringKata.Core.InvoiceAggregate;
+using TheatricalPlayersRefactoringKata.Core.PlayAggregate;
+using TheatricalPlayersRefactoringKata.Core.Services;
+using TheatricalPlayersRefactoringKata.Infrastructure.Formatter;
+using Valhalla.Lib.SharedKernel;
 using Xunit;
-using TheatricalPlayersRefactoringKata.Calculators;
-using TheatricalPlayersRefactoringKata.Formatters;
-
 
 namespace TheatricalPlayersRefactoringKata.Tests;
 
 public class StatementPrinterTests
 {
+    private readonly Mock<IRepository<Invoice>> _invoiceRepositoryMock;
+    private readonly Mock<IReadRepository<Play>> _playRepositoryMock;
+    private readonly InvoiceService _invoiceService;
+    private readonly ServiceProvider _serviceProvider;
+
+    public StatementPrinterTests()
+    {
+        _invoiceRepositoryMock = new Mock<IRepository<Invoice>>();
+        _playRepositoryMock = new Mock<IReadRepository<Play>>();
+        _invoiceService = new InvoiceService(_invoiceRepositoryMock.Object, _playRepositoryMock.Object);
+        _serviceProvider = new ServiceCollection()
+                .AddScoped<TextInvoiceFormatter>()
+                .AddScoped<XmlInvoiceFormatter>()
+                .AddScoped<IInvoiceFormatterFactory, InvoiceFormatterFactory>()
+                .BuildServiceProvider();
+    }
+
     [Fact]
     [UseReporter(typeof(DiffReporter))]
     public void TestStatementExampleLegacy()
     {
-        var plays = new Dictionary<string, Play>();
-        plays.Add("hamlet", new Play("Hamlet", 4024, "tragedy"));
-        plays.Add("as-like", new Play("As You Like It", 2670, "comedy"));
-        plays.Add("othello", new Play("Othello", 3560, "tragedy"));
-
-        Invoice invoice = new Invoice(
-            "BigCo",
-            new List<Performance>
-            {
-                new Performance("hamlet", 55),
-                new Performance("as-like", 35),
-                new Performance("othello", 40),
-            }
-        );
-
-        Dictionary<string, ICalculator> calculators = new Dictionary<string, ICalculator>(){
-            {"tragedy", new TragedyCalculator()},
-            {"comedy", new ComedyCalculator()},
-            {"history", new HistoryCalculator()} 
+        // Arrange
+        var plays = new List<Play>
+        {
+            { new Play("Hamlet", 4024, PlayType.Tragedy) },
+            { new Play("As You Like It", 2670, PlayType.Comedy) },
+            { new Play("Othello", 3560, PlayType.Tragedy) }
         };
-        TextStatementFormatter textStatementFormatter = new TextStatementFormatter(calculators);
-        StatementPrinter statementPrinter = new StatementPrinter(textStatementFormatter);
-        var result = statementPrinter.Print(invoice, plays);
 
+        var invoice = new Invoice("BigCo");
+        invoice.AddPerformance(new Performance("Hamlet", 55));
+        invoice.AddPerformance(new Performance("As You Like It", 35));
+        invoice.AddPerformance(new Performance("Othello", 40));
+
+        foreach (var performance in invoice.Performances)
+        {
+            var play = plays.First(x => x.Name == performance.PlayName);
+            performance.SetAmountOwed(_invoiceService.CalculateAmount(play, performance));
+            performance.SetEarnedCredits(_invoiceService.CalculateCredits(play, performance));
+        }
+
+        invoice.Summarize();
+
+        var factory = _serviceProvider.GetRequiredService<IInvoiceFormatterFactory>();
+        var formatter = factory.GetFormatter("text");
+
+        // Act
+        var result = formatter.Format(invoice);
+
+        // Assert
         Approvals.Verify(result);
     }
+
 
     [Fact]
     [UseReporter(typeof(DiffReporter))]
     public void TestTextStatementExample()
     {
-        var plays = new Dictionary<string, Play>();
-        plays.Add("hamlet", new Play("Hamlet", 4024, "tragedy"));
-        plays.Add("as-like", new Play("As You Like It", 2670, "comedy"));
-        plays.Add("othello", new Play("Othello", 3560, "tragedy"));
-        plays.Add("henry-v", new Play("Henry V", 3227, "history"));
-        plays.Add("john", new Play("King John", 2648, "history"));
-        plays.Add("richard-iii", new Play("Richard III", 3718, "history"));
-
-        Invoice invoice = new Invoice(
-            "BigCo",
-            new List<Performance>
+        // Arrange
+        var plays = new List<Play>
             {
-                new Performance("hamlet", 55),
-                new Performance("as-like", 35),
-                new Performance("othello", 40),
-                new Performance("henry-v", 20),
-                new Performance("john", 39),
-                new Performance("henry-v", 20)
-            }
-        );
+                { new Play("Hamlet", 4024, PlayType.Tragedy) },
+                { new Play("As You Like It", 2670, PlayType.Comedy) },
+                { new Play("Othello", 3560, PlayType.Tragedy) },
+                { new Play("Henry V", 3227, PlayType.History) },
+                { new Play("King John", 2648, PlayType.History) },
+                { new Play("Richard III", 3718, PlayType.History) }
+            };
 
-        Dictionary<string, ICalculator> calculators = new Dictionary<string, ICalculator>(){
-            {"tragedy", new TragedyCalculator()},
-            {"comedy", new ComedyCalculator()},
-            {"history", new HistoryCalculator()} 
-        };
-        TextStatementFormatter textStatementFormatter = new TextStatementFormatter(calculators);
-        StatementPrinter statementPrinter = new StatementPrinter(textStatementFormatter);
-        var result = statementPrinter.Print(invoice, plays);
+        var invoice = new Invoice("BigCo");
+        invoice.AddPerformance(new Performance("Hamlet", 55));
+        invoice.AddPerformance(new Performance("As You Like It", 35));
+        invoice.AddPerformance(new Performance("Othello", 40));
+        invoice.AddPerformance(new Performance("Henry V", 20));
+        invoice.AddPerformance(new Performance("King John", 39));
+        invoice.AddPerformance(new Performance("Henry V", 20));
 
+        foreach (var performance in invoice.Performances)
+        {
+            var play = plays.First(x => x.Name == performance.PlayName);
+            performance.SetAmountOwed(_invoiceService.CalculateAmount(play, performance));
+            performance.SetEarnedCredits(_invoiceService.CalculateCredits(play, performance));
+        }
+
+        invoice.Summarize();
+
+        var serviceProvider = new ServiceCollection()
+                .AddScoped<TextInvoiceFormatter>()
+                .AddScoped<XmlInvoiceFormatter>()
+                .AddScoped<IInvoiceFormatterFactory, InvoiceFormatterFactory>()
+                .BuildServiceProvider();
+
+        var factory = serviceProvider.GetRequiredService<IInvoiceFormatterFactory>();
+        var formatter = factory.GetFormatter("text");
+
+        // Act
+        var result = formatter.Format(invoice);
+
+
+        // Assert
         Approvals.Verify(result);
     }
 
@@ -84,36 +123,49 @@ public class StatementPrinterTests
     [UseReporter(typeof(DiffReporter))]
     public void TestXmlStatementExample()
     {
-        var plays = new Dictionary<string, Play>();
-        plays.Add("hamlet", new Play("Hamlet", 4024, "tragedy"));
-        plays.Add("as-like", new Play("As You Like It", 2670, "comedy"));
-        plays.Add("othello", new Play("Othello", 3560, "tragedy"));
-        plays.Add("henry-v", new Play("Henry V", 3227, "history"));
-        plays.Add("john", new Play("King John", 2648, "history"));
-        plays.Add("richard-iii", new Play("Richard III", 3718, "history"));
-
-        Invoice invoice = new Invoice(
-            "BigCo",
-            new List<Performance>
+        // Arrange
+        var plays = new List<Play>
             {
-                new Performance("hamlet", 55),
-                new Performance("as-like", 35),
-                new Performance("othello", 40),
-                new Performance("henry-v", 20),
-                new Performance("john", 39),
-                new Performance("henry-v", 20)
-            }
-        );
+                { new Play("Hamlet", 4024, PlayType.Tragedy) },
+                { new Play("As You Like It", 2670, PlayType.Comedy) },
+                { new Play("Othello", 3560, PlayType.Tragedy) },
+                { new Play("Henry V", 3227, PlayType.History) },
+                { new Play("King John", 2648, PlayType.History) },
+                { new Play("Richard III", 3718, PlayType.History) }
+            };
 
-        Dictionary<string, ICalculator> calculators = new Dictionary<string, ICalculator>(){
-            {"tragedy", new TragedyCalculator()},
-            {"comedy", new ComedyCalculator()},
-            {"history", new HistoryCalculator()} 
-        };
-        XmlStatementFormatter xmlStatementFormatter = new XmlStatementFormatter(calculators);
-        StatementPrinter statementPrinter = new StatementPrinter(xmlStatementFormatter);
-        var result = statementPrinter.Print(invoice, plays);
+        var invoice = new Invoice("BigCo");
+        invoice.AddPerformance(new Performance("Hamlet", 55));
+        invoice.AddPerformance(new Performance("As You Like It", 35));
+        invoice.AddPerformance(new Performance("Othello", 40));
+        invoice.AddPerformance(new Performance("Henry V", 20));
+        invoice.AddPerformance(new Performance("King John", 39));
+        invoice.AddPerformance(new Performance("Henry V", 20));
 
+        foreach (var performance in invoice.Performances)
+        {
+            var play = plays.First(x => x.Name == performance.PlayName);
+            performance.SetAmountOwed(_invoiceService.CalculateAmount(play, performance));
+            performance.SetEarnedCredits(_invoiceService.CalculateCredits(play, performance));
+        }
+
+        invoice.Summarize();
+
+        var serviceProvider = new ServiceCollection()
+                .AddScoped<TextInvoiceFormatter>()
+                .AddScoped<XmlInvoiceFormatter>()
+                .AddScoped<IInvoiceFormatterFactory, InvoiceFormatterFactory>()
+                .BuildServiceProvider();
+
+        var factory = serviceProvider.GetRequiredService<IInvoiceFormatterFactory>();
+        var formatter = factory.GetFormatter("xml");
+
+        // Act
+        var result = formatter.Format(invoice);
+
+
+        // Assert
         Approvals.Verify(result);
     }
+
 }
