@@ -1,5 +1,5 @@
-﻿using TheatricalPlayersRefactoringKata.UseCases.Plays.Dtos;
-using TheatricalPlayersRefactoringKata.Core.PlayAggregate;
+﻿using TheatricalPlayersRefactoringKata.Core.PlayAggregate;
+using TheatricalPlayersRefactoringKata.UseCases.Plays.Dtos;
 using Valhalla.Lib.Result;
 using Valhalla.Lib.SharedKernel;
 

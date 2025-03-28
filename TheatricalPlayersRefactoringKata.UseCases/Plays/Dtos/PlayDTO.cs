@@ -2,4 +2,4 @@
 
 namespace TheatricalPlayersRefactoringKata.UseCases.Plays.Dtos;
 
-public record PlayDTO(string Name, int Lines, PlayType Type);
+public record PlayDTO(Guid Id, string Name, PlayType Type);

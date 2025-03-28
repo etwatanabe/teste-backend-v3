@@ -20,9 +20,8 @@ public class GetInvoiceByCustomerHandler : IQueryHandler<GetInvoiceByCustomerQue
     {
         var invoice = await _invoiceRepository.FirstOrDefaultAsync(new GetInvoiceByCustomerSpec(request.Customer), cancellationToken);
         if (invoice is null)
-        {
-            return Result.NotFound();
-        }
+            return Result.NotFound("Invoice not found");
+
         return Result<InvoiceDTO>.Success(invoice.ParseDTO());
     }
 }

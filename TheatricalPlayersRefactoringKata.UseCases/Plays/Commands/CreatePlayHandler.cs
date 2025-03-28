@@ -19,7 +19,7 @@ public class CreatePlayHandler : ICommandHandler<CreatePlayCommand, Result<PlayD
     {
         var play = new Play(request.Name, request.Lines, request.Type);
         var newPlay = await _playRepository.AddAsync(play, cancellationToken);
-        
+
         await _playRepository.SaveChangesAsync(cancellationToken);
 
         return Result.Success(newPlay.ParseDTO());
