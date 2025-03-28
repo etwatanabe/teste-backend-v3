@@ -7,9 +7,9 @@ public class Play : EntityBase, IAggregateRoot
 {
     public Play(string name, int lines, PlayType type)
     {
-        Name = Guard.Against.NullOrWhiteSpace(name, nameof(name), "Nome vazio.");
-        Lines = Guard.Against.NegativeOrZero(lines, nameof(lines), "Linhas menor ou igual a zero.");
-        Type = Guard.Against.EnumOutOfRange(type, nameof(type), "Tipo inválido.");
+        Name = Guard.Against.NullOrWhiteSpace(name, nameof(name), "Null name.");
+        Lines = Guard.Against.NegativeOrZero(lines, nameof(lines), "Lines length less than or equal to zero.");
+        Type = Guard.Against.EnumOutOfRange(type, nameof(type), "Invalid type.");
     }
 
     public string Name { get; private set; }

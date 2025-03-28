@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheatricalPlayersRefactoringKata", "TheatricalPlayersRefactoringKata\TheatricalPlayersRefactoringKata.csproj", "{6D24051E-3E14-4B98-A8B3-DFDA7E4ACD7B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheatricalPlayersRefactoringKata.Tests", "TheatricalPlayersRefactoringKata.Tests\TheatricalPlayersRefactoringKata.Tests.csproj", "{2AFBF20D-3D97-46EC-B506-8B7C82598951}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheatricalPlayersRefactoringKata.Core", "TheatricalPlayersRefactoringKata.Core\TheatricalPlayersRefactoringKata.Core.csproj", "{5E097B81-4004-4E97-B150-4EA5710D5478}"
@@ -13,19 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheatricalPlayersRefactorin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheatricalPlayersRefactoringKata.Infrastructure", "TheatricalPlayersRefactoringKata.Infrastructure\TheatricalPlayersRefactoringKata.Infrastructure.csproj", "{191DF1DC-155E-41B0-AA9C-4FEFD459C38A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheatricalPlayersRefactoringKata.Application", "TheatricalPlayersRefactoringKata.Application\TheatricalPlayersRefactoringKata.Application.csproj", "{8A6539DF-7A34-477B-AFB9-CC802C6EE6AF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Application", "1-Application", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Infrastructure", "2-Infrastructure", "{369CB01D-A1A7-72D2-AABC-3F0945D148A2}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Core", "3-Core", "{3560E521-2F29-4E25-BDBE-E3678073F766}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-UseCases", "4-UseCases", "{6515A35A-1C9B-458F-B41B-4D588777417A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Tests", "5-Tests", "{C51F1ECE-4497-408E-8C51-42191D8CB111}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6-Libraries", "6-Libraries", "{2BE9632D-E4C1-4222-BA87-72E36EC98E18}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheatricalPlayersRefactoringKata.API", "TheatricalPlayersRefactoringKata.Application\TheatricalPlayersRefactoringKata.API.csproj", "{8A6539DF-7A34-477B-AFB9-CC802C6EE6AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6D24051E-3E14-4B98-A8B3-DFDA7E4ACD7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D24051E-3E14-4B98-A8B3-DFDA7E4ACD7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D24051E-3E14-4B98-A8B3-DFDA7E4ACD7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D24051E-3E14-4B98-A8B3-DFDA7E4ACD7B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2AFBF20D-3D97-46EC-B506-8B7C82598951}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2AFBF20D-3D97-46EC-B506-8B7C82598951}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AFBF20D-3D97-46EC-B506-8B7C82598951}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,13 +42,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{2AFBF20D-3D97-46EC-B506-8B7C82598951} = {C51F1ECE-4497-408E-8C51-42191D8CB111}
-		{5E097B81-4004-4E97-B150-4EA5710D5478} = {3560E521-2F29-4E25-BDBE-E3678073F766}
-		{C0B579F0-9628-4FD5-B19C-39FD858488C2} = {6515A35A-1C9B-458F-B41B-4D588777417A}
-		{191DF1DC-155E-41B0-AA9C-4FEFD459C38A} = {369CB01D-A1A7-72D2-AABC-3F0945D148A2}
-		{8A6539DF-7A34-477B-AFB9-CC802C6EE6AF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8623A9D0-8794-4247-A2DC-F78BC4D24919}
