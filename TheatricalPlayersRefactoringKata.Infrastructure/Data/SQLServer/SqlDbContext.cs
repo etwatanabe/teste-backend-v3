@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using TheatricalPlayersRefactoringKata.Core.Common.Exceptions;
 using TheatricalPlayersRefactoringKata.Core.InvoiceAggregate;
 using TheatricalPlayersRefactoringKata.Core.PlayAggregate;
-using System.Reflection;
 using Valhalla.Lib.SharedKernel;
-using TheatricalPlayersRefactoringKata.Core.Common.Exceptions;
 
 namespace TheatricalPlayersRefactoringKata.Infrastructure.Data.SQLServer;
 
@@ -15,7 +15,7 @@ public class SqlDbContext(IServiceProvider serviceProvider,
     : DbContext(options)
 {
     private readonly IDomainEventDispatcher? _domainEventDispatcher = serviceProvider?.GetRequiredService<IDomainEventDispatcher>();
-    
+
     public DbSet<Play> Play => Set<Play>();
     public DbSet<Invoice> Invoice => Set<Invoice>();
 

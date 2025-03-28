@@ -14,6 +14,14 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
         builder
             .HasIndex(m => m.Customer);
 
+        builder
+          .Property(ca => ca.TotalAmountOwed)
+          .IsRequired();
+
+        builder
+            .Property(ca => ca.TotalEarnedCredits)
+            .IsRequired();
+
         builder.HasMany(c => c.Performances)
           .WithOne()
           .HasForeignKey(nameof(Performance) + "Id")

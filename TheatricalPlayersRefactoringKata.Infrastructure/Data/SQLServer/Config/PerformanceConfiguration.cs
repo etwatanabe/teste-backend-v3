@@ -14,11 +14,19 @@ public class PerformanceConfiguration : IEntityTypeConfiguration<Performance>
         builder.HasKey("Id");
 
         builder
-            .Property(ca => ca.PlayID)
+            .Property(ca => ca.PlayName)
             .IsRequired();
 
         builder
             .Property(ca => ca.Audience)
+            .IsRequired();
+
+        builder
+            .Property(ca => ca.AmountOwed)
+            .IsRequired();
+
+        builder
+            .Property(ca => ca.EarnedCredits)
             .IsRequired();
     }
 }
