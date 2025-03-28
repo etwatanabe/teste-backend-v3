@@ -1,8 +1,10 @@
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Extensions.Logging;
-using TheatricalPlayersRefactoringKata.Infrastructure.Data.SQL;
+using System.Reflection;
+using TheatricalPlayersRefactoringKata.Application.Middleware;
+using TheatricalPlayersRefactoringKata.Infrastructure;
 using TheatricalPlayersRefactoringKata.Infrastructure.Data.SQLServer;
-using Valhalla.Lib.SharedKernel;
 
 var logger = Log.Logger = new LoggerConfiguration()
   .Enrich.FromLogContext()
@@ -32,12 +34,24 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Theatrical Players API",
+        Version = "v1",
+        Description = "Theatrical Players"
+    });
 
-// Configura a Database
-builder.Services.AddSqlDbContext(microsoftLogger);
+    // Adiciona suporte a comentários XML
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+});
+
+// Configure services
+builder.Services.AddInfrastructureServices(microsoftLogger);
 builder.Services.AddUseCasesServices(microsoftLogger);
-builder.Services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
 
 // Isso aqui nao deveria ta aqui, mas esta, fé
 builder.Services.AddHostedService<AppDbInitializerService>();
@@ -48,12 +62,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Theatrical Players API v1");
+    });
     app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.MapControllers();
 app.Run();
 

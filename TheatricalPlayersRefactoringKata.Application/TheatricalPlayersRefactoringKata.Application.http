@@ -1,6 +1,65 @@
-@TheatricalPlayersRefactoringKata.Application_HostAddress = http://localhost:5150
+@TheatricalPlayersRefactoringKata.Application_HostAddress = https://localhost:7055
+@TheatricalPlayersRefactoringKata.Customer = BigCo7
+### PlayController Endpoints ###
 
-GET {{TheatricalPlayersRefactoringKata.Application_HostAddress}}/weatherforecast/
+# Get all plays
+GET {{TheatricalPlayersRefactoringKata.Application_HostAddress}}/api/v1/play
 Accept: application/json
 
 ###
+
+# Get a play by name
+GET {{TheatricalPlayersRefactoringKata.Application_HostAddress}}/api/v1/play/Hamlet
+Accept: application/json
+
+###
+
+# Create a new play
+POST {{TheatricalPlayersRefactoringKata.Application_HostAddress}}/api/v1/play
+Content-Type: application/json
+
+{
+  "name": "As You Like It",
+  "type": 0,
+  "lines": 1000
+}
+
+### InvoiceController Endpoints ###
+
+# Create a new invoice
+POST {{TheatricalPlayersRefactoringKata.Application_HostAddress}}/api/v1/invoice
+Content-Type: application/json
+
+{
+  "customer": "{{TheatricalPlayersRefactoringKata.Customer}}"
+}
+
+###
+
+# Get an invoice by customer
+GET {{TheatricalPlayersRefactoringKata.Application_HostAddress}}/api/v1/invoice?customer={{TheatricalPlayersRefactoringKata.Customer}}
+Accept: application/json
+
+###
+
+# Add a performance to an existing invoice
+PATCH {{TheatricalPlayersRefactoringKata.Application_HostAddress}}/api/v1/invoice
+Content-Type: application/json
+
+{
+  "customer": "{{TheatricalPlayersRefactoringKata.Customer}}",
+  "performance": {
+    "playName": "As You Like It",
+    "audience": 36
+  }
+}
+
+###
+
+# Summarize an invoice
+POST {{TheatricalPlayersRefactoringKata.Application_HostAddress}}/api/v1/invoice/summarize
+Content-Type: application/json
+
+{
+  "customer": "{{TheatricalPlayersRefactoringKata.Customer}}"
+}
