@@ -7,6 +7,7 @@ public class GetInvoiceByCustomerSpec : Specification<Invoice>
     public GetInvoiceByCustomerSpec(string customer)
     {
         Query
-            .Where(p => p.Customer == customer);
+            .Where(p => p.Customer == customer)
+            .Include(p => p.Performances);
     }
 }
